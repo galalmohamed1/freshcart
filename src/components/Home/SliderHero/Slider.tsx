@@ -32,17 +32,17 @@ export default function Slider({
       className="
     h-100 relative
 
-    [&_.swiper-pagination]:!bottom-5
-    [&_.swiper-pagination-bullet]:!w-2.5
-    [&_.swiper-pagination-bullet]:!h-2.5
-    [&_.swiper-pagination-bullet]:!bg-white
-    [&_.swiper-pagination-bullet]:!opacity-70
-    [&_.swiper-pagination-bullet]:!transition-all
-    [&_.swiper-pagination-bullet]:!duration-300
-    [&_.swiper-pagination-bullet-active]:!w-7
-    [&_.swiper-pagination-bullet-active]:!rounded-full
-    [&_.swiper-pagination-bullet-active]:!bg-white
-    [&_.swiper-pagination-bullet-active]:!opacity-100
+    [&_.swiper-pagination]:bottom-5!
+    [&_.swiper-pagination-bullet]:w-2.5!
+    [&_.swiper-pagination-bullet]:h-2.5!
+    [&_.swiper-pagination-bullet]:bg-white!
+    [&_.swiper-pagination-bullet]:opacity-70!
+    [&_.swiper-pagination-bullet]:transition-all!
+    [&_.swiper-pagination-bullet]:duration-300!
+    [&_.swiper-pagination-bullet-active]:w-7!
+    [&_.swiper-pagination-bullet-active]:rounded-full!
+    [&_.swiper-pagination-bullet-active]:bg-white!
+    [&_.swiper-pagination-bullet-active]:opacity-100!
 
     [&_.swiper-slide-active_.slide-title]:translate-y-0
     [&_.swiper-slide-active_.slide-title]:opacity-100

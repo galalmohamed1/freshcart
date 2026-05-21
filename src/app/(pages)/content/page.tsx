@@ -196,6 +196,7 @@ export default function contact() {
                       <select
                         id="subject"
                         name="subject"
+                        defaultValue="1"
                         required
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all bg-white mb-5"
                       >

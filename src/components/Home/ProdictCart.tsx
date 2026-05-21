@@ -1,11 +1,12 @@
-import React from "react";
+
 import Link from "next/link";
 import Image from "next/image";
-import { FaArrowsRotate, FaPlus } from "react-icons/fa6";
+import { FaArrowsRotate } from "react-icons/fa6";
 import { FaRegEye } from "react-icons/fa6";
 import { AllProdectsData } from "@/api/types/home.interface";
 import { renderStars } from "./FeaturedProducts/StarsRate/StarsRate";
-
+import ToggleBtnsInWishlist from './FeaturedProducts/ToggleBtnsInWishlist/ToggleBtnsInWishlist';
+import ButtonForAddToCart from './FeaturedProducts/ButtonForAddToCart/ButtonForAddToCart';
 type Props = {
   product: AllProdectsData;
 };
@@ -33,11 +34,11 @@ export default function ProdictCart({ product }: Props) {
           </div>
         )}
         <div className="absolute top-3 right-3 flex flex-col space-y-2">
-          {/* <ToggleBtnsInWishlist
+          <ToggleBtnsInWishlist
             classesOne="bg-white h-8 w-8 rounded-full flex items-center justify-center transition shadow-sm cursor-pointer text-gray-600 hover:text-red-500"
             classesTwo="bg-white h-8 w-8 rounded-full flex items-center justify-center transition shadow-sm cursor-pointer text-red-600 hover:text-red-500"
             id={product.id}
-          /> */}
+          />
           <button className="bg-white h-8 w-8 rounded-full flex items-center justify-center text-gray-600 hover:text-blue-600 cursor-pointer shadow-sm">
             <FaArrowsRotate />
           </button>
@@ -83,12 +84,11 @@ export default function ProdictCart({ product }: Props) {
                 </span>
               )}
             </div>
-            <button
-              className="h-10 w-10 rounded-full flex items-center justify-center transition bg-green-600 text-white hover:bg-green-700 disabled:opacity-70 cursor-pointer"
+            <ButtonForAddToCart
+              classes="h-10 w-10 rounded-full flex items-center justify-center transition bg-green-600 text-white hover:bg-green-700 disabled:opacity-70 cursor-pointer"
+              icon="plus"
               id={product.id}
-            >
-                <FaPlus />
-            </button>
+            />
           </div>
         </div>
       </div>

@@ -21,6 +21,7 @@ const nextConfig = {
         pathname: '/Route-Academy-brands/**',
       },
     ],
+    minimumCacheTTL: 2678400,
   },
   
 };

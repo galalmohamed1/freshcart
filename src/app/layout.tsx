@@ -4,8 +4,13 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
+import { Toaster } from "sonner";
+import Providers from "@/app/providers/providers";
 
-const inter = Exo({ subsets: ["latin"], variable: "--font-exo" });
+const inter = Exo({
+  subsets: ["latin"],
+  variable: "--font-exo",
+});
 
 export const metadata: Metadata = {
   title: "Fresh Cart",
@@ -22,10 +27,22 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", "font-sans", inter.variable)}
     >
-      <body className="min-h-full flex flex-col" cz-shortcut-listen="true">
-        <Navbar />
-        {children}
-        <Footer />
+      <body className="min-h-full flex flex-col">
+        <Providers>
+          <Navbar />
+
+          <Toaster
+            position="top-center"
+            richColors
+            toastOptions={{
+              duration: 2500,
+            }}
+          />
+
+          {children}
+
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

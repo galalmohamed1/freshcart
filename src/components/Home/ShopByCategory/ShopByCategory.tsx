@@ -3,7 +3,8 @@ import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
 import Image from "next/image";
 import { getAllCategory } from "@/api/services/home.services";
-import DealsCards from "./DealsCards/DealsCards";
+
+
 
 export default async function ShopByCategory() {
   const allCategory = await getAllCategory();
@@ -19,7 +20,7 @@ export default async function ShopByCategory() {
               </h2>
             </div>
             <Link
-              href="\categories"
+              href="/categories"
               className="text-green-600 self-end sm:self-auto hover:text-green-700 font-medium flex items-center cursor-pointer"
             >
               View All Categories <FaArrowRightLong className="ml-2" />
@@ -49,7 +50,7 @@ export default async function ShopByCategory() {
           </div>
         </div>
       </section>
-      <DealsCards/>
+      
     </>
   );
 }

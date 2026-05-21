@@ -1,11 +1,17 @@
-import React from "react";
+"use client";
 import { FaTruck } from "react-icons/fa";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 import { FaShieldAlt } from "react-icons/fa";
 import { FaHeadset } from "react-icons/fa";
 import image1 from "@images/home-slider-1.png";
-import Slider from "./Slider";
+import dynamic from "next/dynamic";
 
+const Slider = dynamic(() => import("./Slider"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[400px] w-full animate-pulse rounded-2xl bg-gray-100" />
+  ),
+});
 export default function SliderComponent() {
   const slides = [
     {
