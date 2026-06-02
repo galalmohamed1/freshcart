@@ -209,7 +209,7 @@ export default function Navbar() {
             </nav>
             <div className="flex items-center gap-1 lg:gap-2">
               <Link
-                href="/contact"
+                href="/content"
                 className="hidden lg:flex items-center gap-2 pr-3 mr-2 border-r border-gray-200 hover:opacity-80 transition-opacity"
               >
                 <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center">
@@ -223,7 +223,7 @@ export default function Navbar() {
                 </div>
               </Link>
               <Link
-                href="/wish-list"
+                href="/wishlist"
                 className="relative p-2.5 rounded-full hover:bg-gray-100 transition-colors group"
               >
                 <FaRegHeart className=" text-xl text-gray-500 group-hover:text-green-600 transition-colors" />
@@ -299,7 +299,7 @@ export default function Navbar() {
                         <DropdownMenuItem>
                           <Link
                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:text-green-600 hover:bg-green-50 transition-colors"
-                            href="/wish-list"
+                            href="/wishlist"
                           >
                             <FaRegHeart className="w-4 text-gray-400" />
                             My Wishlist

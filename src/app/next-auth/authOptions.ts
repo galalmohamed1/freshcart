@@ -1,10 +1,16 @@
 import { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import FacebookProvider from "next-auth/providers/facebook";
 import { jwtDecode } from 'jwt-decode';
 
 export const authOptions: NextAuthOptions = {
   providers: [
     // Add your authentication providers here
+    
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+    }),
     Credentials({
       name: 'Credentials',
       credentials: {
@@ -34,6 +40,7 @@ export const authOptions: NextAuthOptions = {
             email: result.user.email,
             role: result.user.role,
             accessToken: result.token,
+            provider: "credentials",
           };
         } catch (err) {
           throw new Error((err as Error).message);
@@ -41,12 +48,22 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, account }) {
       if (user) {
         token.routeToken = user.accessToken;
         token.id = user.id;
         token.role = user.role;
+        //
+        token.provider = account?.provider;
+      
+      if (user.accessToken) {
+          token.routeToken = user.accessToken;
+        }
       }
       return token;
     },
@@ -54,7 +71,11 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.id = token.id;
         session.user.role = token.role;
+        //
+        session.user.provider = token.provider;
       }
+      //
+      session.routeToken = token.routeToken;
       return session;
     },
   },

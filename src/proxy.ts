@@ -21,7 +21,7 @@ export async function proxy(requset: NextRequest) {
   const myPath = requset.nextUrl.pathname;
   const myToken = await getToken({
     req: requset,
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET ,
     secureCookie: process.env.NODE_ENV === 'production',
   });
   const token = myToken?.routeToken;

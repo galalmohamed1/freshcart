@@ -1,4 +1,4 @@
-import { AllProdectsData, AllProdectsResponse, GetAllCategoriesData, GetAllCategoriesResponse,SingleCategoryResponse,SingleCategoryData, SingleProdectData, SingleProdectResponse, Subcategory } from "@/api/types/home.interface";
+import { AllProdectsData, AllProdectsResponse, GetAllCategoriesData, GetAllCategoriesResponse,SingleCategoryResponse,SingleCategoryData, SingleProdectData, SingleProdectResponse, Subcategory, Root2 } from "@/api/types/home.interface";
 
 export async function getAllProdects():Promise<AllProdectsData[]|undefined> {
     try {
@@ -10,12 +10,12 @@ export async function getAllProdects():Promise<AllProdectsData[]|undefined> {
   }
   }
 
-  export async function getSingleProduct(id: string): Promise<SingleProdectData> {
+  export async function getSingleProduct(id: string): Promise<Root2> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/products/${id}`);
-    const data:SingleProdectResponse = await res.json();
+    const res = await fetch(`https://ecommerce.routemisr.com/api/v1/products/${id}`);
+    const data = await res.json();
     return data.data;
-  } catch {
+  } catch (error) {
     throw new Error('Failed to fetch product');
   }
 }

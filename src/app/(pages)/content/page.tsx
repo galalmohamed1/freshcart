@@ -50,12 +50,20 @@ export default function contact() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
                       <p className="text-gray-500 text-sm mb-2">Mon-Fri from 8am to 6pm</p>
-                      <a
-                        href="tel:+18001234567"
-                        className="text-green-500 font-medium hover:underline"
-                      >
-                        +1 (800) 123-4567
-                      </a>
+                      <div className='flex flex-col'>
+                        <a
+                          href="tel:+201003044257"
+                          className="text-green-500 font-medium hover:underline"
+                        >
+                          +201003044257
+                        </a>
+                        <a
+                          href="tel:+201121113152"
+                          className="text-green-500 font-medium hover:underline"
+                        >
+                          +201121113152
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -70,10 +78,10 @@ export default function contact() {
                         We&lsquo;ll respond within 24 hours
                       </p>
                       <a
-                        href="mailto:support@freshcart.com"
+                        href="mailto:gm3308769@gmail.com"
                         className="text-green-500 font-medium hover:underline"
                       >
-                        support@freshcart.com
+                        gm3308769@gmail.com
                       </a>
                     </div>
                   </div>
@@ -86,9 +94,9 @@ export default function contact() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Office</h3>
                       <p className="text-gray-500 text-sm mb-2">
-                        123 Commerce Street <br />
-                        New York, NY 10001 <br />
-                        United States
+                        123 Street <br />
+                        Cairo <br />
+                        Egypt
                       </p>
                     </div>
                   </div>
@@ -101,9 +109,9 @@ export default function contact() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Business Hours</h3>
                       <p className="text-gray-500 text-sm mb-2">
-                        Monday - Friday: 8am - 6pm <br />
+                        Sunday - Thursday: 8am - 6pm <br />
                         Saturday: 9am - 4pm <br />
-                        Sunday: Closed
+                        Friday: Closed
                       </p>
                     </div>
                   </div>
@@ -112,7 +120,8 @@ export default function contact() {
                   <h3 className="font-semibold text-gray-900 mb-4">Follow Us</h3>
                   <div className="flex items-center gap-3">
                     <a
-                      href="#"
+                      href="https://www.facebook.com/galal.mohamed.395669"
+                      target="_blank"
                       className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-green-500 hover:text-white transition-colors"
                     >
                       <FaFacebookF />
@@ -124,13 +133,15 @@ export default function contact() {
                       <FaTwitter />
                     </a>
                     <a
-                      href="#"
+                      href="https://www.instagram.com/galalmohamed26?igsh=NnRkYXJvczlrYjI3&utm_source=qr"
+                      target="_blank"
                       className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-green-500 hover:text-white transition-colors"
                     >
                       <FaInstagram />
                     </a>
                     <a
-                      href="#"
+                      href="https://www.linkedin.com/in/galal-mohamed-b926b5225"
+                      target="_blank"
                       className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-green-500 hover:text-white transition-colors"
                     >
                       <FaLinkedinIn />

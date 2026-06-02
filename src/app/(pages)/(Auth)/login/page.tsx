@@ -26,6 +26,9 @@ import { FaEyeSlash } from "react-icons/fa";
 import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/firebase/config";
+
 export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -37,6 +40,25 @@ export default function Login() {
     },
     resolver: zodResolver(LoginSchema),
   });
+  // login with google using firebase
+  async function handleGoogleLogin() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      console.log("Firebase user:", user);
+      console.log("Firebase ID Token:", idToken);
+
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Google Firebase Login Error:", error);
+    }
+  }
+
+  // 
   const { handleSubmit } = form;
   async function mySubmit(data: LoginSchemaType) {
     setLoading(true);
@@ -111,6 +133,7 @@ export default function Login() {
                 <div className="space-y-3 mb-6">
                   <button
                     type="button"
+                    onClick={handleGoogleLogin}
                     className="w-full flex items-center justify-center gap-3 py-3 px-4 border-2 border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-all duration-200 cursor-pointer"
                   >
                     <FaGoogle className="me-2 text-red-600 text-lg" />
@@ -120,6 +143,7 @@ export default function Login() {
                   </button>
                   <button
                     type="button"
+                    onClick={() => signIn("facebook", { callbackUrl: "/" })}
                     className="w-full flex items-center justify-center gap-3 py-3 px-4 border-2 border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-all duration-200 cursor-pointer"
                   >
                     <FaFacebook className="me-2 text-blue-600 text-lg" />

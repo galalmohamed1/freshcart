@@ -14,7 +14,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { userRegister } from '@/actions/auth.action';
+import { userRegister } from '@/actions/auth.action';
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { RegisterSchema, RegisterSchemaType } from "@/schemas/auth.schema";
@@ -85,15 +85,15 @@ export default function Register() {
 
   async function mySubmit(data: RegisterSchemaType) {
     setLoading(true);
-  //     const isAccountSuccess = await userRegister(data);
-  //     if (isAccountSuccess) {
-  //       toast.success('Welcome You’re all set! Your account has been created successfully ❤️💕');
-  //             setTimeout(() => {
-  //           router.push('/login');
-  //   }, 1500);
-  //     } else {
-  //       toast.error('Oops! Registration failed We couldn’t create your account Try again ⚠️');
-  //     }
+      const isAccountSuccess = await userRegister(data);
+      if (isAccountSuccess) {
+        toast.success('Welcome You’re all set! Your account has been created successfully ❤️💕');
+              setTimeout(() => {
+            router.push('/login');
+    }, 1500);
+      } else {
+        toast.error('Oops! Registration failed We couldn’t create your account Try again ⚠️');
+      }
     setLoading(false);
   }
   return (
