@@ -14,9 +14,9 @@ export async function proxy(requset: NextRequest) {
   const authRoutes = [
     '/login',
     '/register',
-    '/forgot-password',
-    '/forgot-password/otp',
-    '/forgot-password/new-password',
+    '/forget-password',
+    '/forget-password/otp',
+    '/forget-password/new-password',
   ];
   const myPath = requset.nextUrl.pathname;
   const myToken = await getToken({
@@ -44,8 +44,8 @@ export const config = {
     '/wishlist',
     '/login',
     '/register',
-    '/forgot-password',
-    '/forgot-password/otp',
-    '/forgot-password/new-password',
+    '/forget-password',
+    '/forget-password/otp',
+    '/forget-password/new-password',
   ],
 };
