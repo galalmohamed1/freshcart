@@ -16,7 +16,7 @@ export async function proxy(requset: NextRequest) {
     '/register',
     '/forget-password',
     '/forget-password/otp',
-    '/forget-password/new-password',
+    '/forget-password/new-password' ,
   ];
   const myPath = requset.nextUrl.pathname;
   const myToken = await getToken({
