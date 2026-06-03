@@ -4,7 +4,7 @@ import { getAccessToken } from '@/utilities';
 export async function AddToCart(productId: string) {
   const token = await getAccessToken();
   if (!token) {
-    throw new Error('Hey 👋, please login to start add items to your cart');
+    return Error('Hey 👋, please login to start add items to your cart');
   }
   const res = await fetch('https://ecommerce.routemisr.com/api/v2/cart', {
     method: 'POST',
@@ -19,6 +19,7 @@ export async function getLoggedUserCart() {
   const res = await fetch('https://ecommerce.routemisr.com/api/v2/cart', {
     method: 'GET',
     headers: { token: token as string, 'content-type': 'application/json' },
+    cache: "no-store",
   });
   const data = await res.json();
   return data;

@@ -4,7 +4,7 @@ import { getAccessToken } from '@/utilities';
 export async function AddToWishlist(productId: string) {
   const token = await getAccessToken();
   if (!token) {
-    throw new Error('Hey 👋, please login to start add items to your cart');
+    return Error('Hey 👋, please login to start add items to your cart');
   }
   const res = await fetch('https://ecommerce.routemisr.com/api/v1/wishlist', {
     method: 'POST',

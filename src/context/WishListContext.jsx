@@ -9,13 +9,14 @@ export default function WishlistContextProvider({ children }) {
   async function getProductWishlist() {
     try {
       const res = await getLoggedUserWishlist();
-      let sum = 0;
-      res.data.products.forEach((product) => {
-        sum += product.count;
-      });
-      setnumOfWishlistItems(sum);
+      if (res?.status === "success") {
+        setnumOfWishlistItems(res.count ?? res.data?.length ?? 0);
+      } else {
+        setnumOfWishlistItems(0);
+      }
     } catch (error) {
       console.log(error.message);
+      setnumOfWishlistItems(0);
     }
   }
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function WishlistContextProvider({ children }) {
     getProductWishlist();
   }, []);
   return (
-    <WishlistContext.Provider value={{ numOfWishlistItems, setnumOfWishlistItems }}>
+    <WishlistContext.Provider value={{ numOfWishlistItems, setnumOfWishlistItems, refreshWishlist:getProductWishlist, }}>
       {children}
     </WishlistContext.Provider>
   );
