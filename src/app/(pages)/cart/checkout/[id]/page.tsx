@@ -179,7 +179,7 @@ export default function CheackOut() {
                             <Textarea
                               {...field}
                               id="details"
-                              className="pl-14! min-h-[100px] py-4! rounded-md! border! border-gray-200! bg-gray-50/50 focus:bg-white! focus:outline-none! focus:ring-2! focus:ring-green-500/0! focus:border-green-500! transition-all! text-[16px]"
+                              className="pl-14! min-h-25 py-4! rounded-md! border! border-gray-200! bg-gray-50/50 focus:bg-white! focus:outline-none! focus:ring-2! focus:ring-green-500/0! focus:border-green-500! transition-all! text-[16px]"
                               aria-invalid={fieldState.invalid}
                               placeholder="Street name, building number, floor, apartment..."
                             />
