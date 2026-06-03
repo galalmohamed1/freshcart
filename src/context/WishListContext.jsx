@@ -2,6 +2,7 @@
 import { getLoggedUserWishlist } from '@/actions/addToWishlist.action';
 import React, { useEffect, useState } from 'react';
 import { createContext } from 'react';
+import { toast } from 'sonner';
 export const WishlistContext = createContext();
 
 export default function WishlistContextProvider({ children }) {
@@ -17,6 +18,7 @@ export default function WishlistContextProvider({ children }) {
     } catch (error) {
       console.log(error.message);
       setnumOfWishlistItems(0);
+      
     }
   }
   useEffect(() => {

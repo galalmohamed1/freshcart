@@ -1,10 +1,17 @@
 'use server';
 import { getAccessToken } from '@/utilities';
+import { toast } from 'sonner';
+
+
 
 export async function AddToWishlist(productId: string) {
   const token = await getAccessToken();
   if (!token) {
-    return Error('Hey 👋, please login to start add items to your cart');
+    return {
+      status: "unauthenticated",
+      message: "Hey 👋, please login to start add items to your cart",
+    };
+    // return toast.error("Hey 👋, please login to start add items to your cart");
   }
   const res = await fetch('https://ecommerce.routemisr.com/api/v1/wishlist', {
     method: 'POST',

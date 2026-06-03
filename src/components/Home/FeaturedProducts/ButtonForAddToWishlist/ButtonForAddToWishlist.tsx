@@ -40,9 +40,10 @@ export default function ButtonForAddToWishlist({
       if (res.status === 'success') {
         setSuccess(true);
         setnumOfWishlistItems(numOfWishlistItems + 1);
+        toast.success("Product added to wishlist successfully");
         onSuccess?.();
       } else {
-        console.log('FAILED RESPONSE');
+        toast.error(res.message);
       }
     } catch (error) {
       console.error('ERROR:', error);
