@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaArrowLeft, FaTruck } from "react-icons/fa";
 import { FaShieldAlt } from "react-icons/fa";
 import { IoLockClosed } from "react-icons/io5";
@@ -11,38 +11,63 @@ import { SpinnerCustom } from "@/components/ButtonSpinner/ButtonSpinner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  forgotPasswordSchema,
-  forgotPasswordSchemaType,
-} from "@/schemas/auth.schema";
+import { otpSchema, OtpSchemaType } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FaCheck } from "react-icons/fa";
 import { toast } from "sonner";
 import { FaKey } from "react-icons/fa";
-import { forgotPasswords } from "@/actions/auth.action";
-
+import { forgotPasswords, verifyResetCode } from "@/actions/auth.action";
+import { useSearchParams } from "next/navigation";
 export default function Login() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const form = useForm<forgotPasswordSchemaType>({
+  const [resendLoading, setResendLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+  const form = useForm<OtpSchemaType>({
     defaultValues: {
-      email: "",
+      otp: "",
     },
-    resolver: zodResolver(forgotPasswordSchema),
+    resolver: zodResolver(otpSchema),
   });
   const { handleSubmit } = form;
-  async function mySubmit(data: forgotPasswordSchemaType) {
+  async function mySubmit(data: OtpSchemaType) {
+    console.log("Submitting OTP:", data);
     setLoading(true);
-    const response = await forgotPasswords(data);
+    const response = await verifyResetCode(data);
     if (response?.ok) {
       toast.success("Reset code sent to your email!");
       setTimeout(() => {
-        router.push(`/forget-password/otp?email=${data.email}`);
+        router.push(`/forget-password/new-password?email=${email}`);
       }, 1500);
     } else {
       toast.error(response?.data?.message || response?.error);
     }
-
     setLoading(false);
+  }
+  async function handleResend() {
+    if (!email) return;
+
+    setResendLoading(true);
+
+    const response = await forgotPasswords({ email });
+    if (response?.ok) {
+      toast.success("Code resent successfully");
+      setCooldown(30);
+      const interval = setInterval(() => {
+        setCooldown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      toast.error(response?.data?.message || response?.error);
+    }
+    setResendLoading(false);
   }
   return (
     <>
@@ -107,21 +132,21 @@ export default function Login() {
                     </span>
                   </div>
                   <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                    Forgot Password?
+                    Check Your Email
                   </h1>
                   <p className="text-gray-600">
-                    No worries, we&apos;ll send you a reset code
+                    Enter the 6-digit code sent to {email}
                   </p>
                 </div>
                 <div className="flex items-center justify-center mb-8">
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 bg-green-600 text-white ring-4 ring-green-100">
-                      <MdEmail />
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 bg-green-600 text-white">
+                      <FaCheck />
                     </div>
-                    <div className="w-16 h-0.5 mx-2 transition-all duration-300 bg-gray-200"></div>
+                    <div className="w-16 h-0.5 mx-2 transition-all duration-300 bg-green-600"></div>
                   </div>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 bg-gray-100 text-gray-400">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 bg-green-600 text-white ring-4 ring-green-100">
                       <FaKey />
                     </div>
                     <div className="w-16 h-0.5 mx-2 transition-all duration-300 bg-gray-200"></div>
@@ -137,19 +162,22 @@ export default function Login() {
                   className="space-y-6 text-[#364153]"
                 >
                   <div className="relative flex flex-col gap-2">
-                    <MdEmail className="absolute left-4 top-9.5 text-xl text-gray-400" />
+                    <FaShieldAlt className="absolute left-4 top-11.5 text-xl text-gray-400" />
                     <Controller
-                      name="email"
+                      name="otp"
                       control={form.control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel htmlFor="email">Email Address</FieldLabel>
+                          <FieldLabel htmlFor="otp">
+                            Verification Code
+                          </FieldLabel>
                           <Input
                             {...field}
-                            id="email"
-                            className="pl-10! py-5! rounded-md! border! border-gray-200! bg-gray-50/50 focus:bg-white! focus:outline-none! focus:ring-2! focus:ring-green-500/0! focus:border-green-500! transition-all! text-[16px]"
+                            id="otp"
+                            maxLength={6}
+                            className="w-full! px-4! py-7! pl-12! border-2! border-gray-200! rounded-xl! focus:outline-none! focus:border-green-500! focus:ring-2! focus:ring-green-100! transition-all! text-center! text-2xl! tracking-[0.5em]! font-mono!"
                             aria-invalid={fieldState.invalid}
-                            placeholder="Enter your email"
+                            placeholder="••••••"
                           />
                           {fieldState.invalid && (
                             <FieldError errors={[fieldState.error]} />
@@ -157,6 +185,23 @@ export default function Login() {
                         </Field>
                       )}
                     />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-gray-500">
+                      Didn&apos;t receive the code?{" "}
+                      <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={resendLoading || cooldown > 0}
+                        className="inline-flex items-center gap-2 text-sm text-green-600 hover:text-green-700 font-medium disabled:opacity-50 transition-colors"
+                      >
+                        {resendLoading
+                          ? "Sending..."
+                          : cooldown > 0
+                            ? `Resend in ${cooldown}s`
+                            : "Resend Code"}
+                      </button>
+                    </p>
                   </div>
                   <Button
                     type="submit"
@@ -166,35 +211,24 @@ export default function Login() {
                     {loading ? (
                       <>
                         <SpinnerCustom />
-                        <span>Sending Code...</span>
+                        <span>Verifying Code...</span>
                       </>
                     ) : (
                       <>
-                        <span>Send Reset Code</span>
+                        <span>Verify Code</span>
                       </>
                     )}
                   </Button>
                   <div className="text-center">
                     <Link
-                      className="inline-flex items-center gap-2 text-sm text-green-600 hover:text-green-700 font-medium transition-colors"
-                      href="/login"
+                      className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-green-600 font-medium transition-colors"
+                      href="/forget-password"
                     >
                       <FaArrowLeft className="text-xs" />
-                      Back to Sign In
+                      Change email address
                     </Link>
                   </div>
                 </form>
-                <div className="text-center mt-8 pt-6 border-t border-gray-100">
-                  <p className="text-gray-600">
-                    Remember your password?{" "}
-                    <Link
-                      className="inline-flex items-center gap-2 text-sm text-green-600 hover:text-green-700 font-medium transition-colors"
-                      href="/login"
-                    >
-                      Sign In
-                    </Link>
-                  </p>
-                </div>
               </div>
             </div>
           </div>
