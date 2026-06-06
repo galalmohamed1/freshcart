@@ -1,6 +1,6 @@
 import React from 'react';
 import { MdHeadsetMic } from 'react-icons/md';
-import { FaPhone } from 'react-icons/fa6';
+import { FaGithub, FaPhone } from 'react-icons/fa6';
 import { MdEmail } from 'react-icons/md';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { MdAccessTimeFilled } from 'react-icons/md';
@@ -122,27 +122,28 @@ export default function contact() {
                     <a
                       href="https://www.facebook.com/galal.mohamed.395669"
                       target="_blank"
-                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-green-500 hover:text-white transition-colors"
+                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-blue-500 hover:text-white transition-colors"
                     >
                       <FaFacebookF />
                     </a>
                     <a
-                      href="#"
-                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-green-500 hover:text-white transition-colors"
+                      href="https://github.com/galalmohamed1"
+                      target="_blank"
+                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-black hover:text-white transition-colors"
                     >
-                      <FaTwitter />
+                      <FaGithub />
                     </a>
                     <a
                       href="https://www.instagram.com/galalmohamed26?igsh=NnRkYXJvczlrYjI3&utm_source=qr"
                       target="_blank"
-                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-green-500 hover:text-white transition-colors"
+                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gradient-to-r from-yellow-500 to-purple-500 hover:text-white transition-colors"
                     >
                       <FaInstagram />
                     </a>
                     <a
                       href="https://www.linkedin.com/in/galal-mohamed-b926b5225"
                       target="_blank"
-                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-green-500 hover:text-white transition-colors"
+                      className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-blue-500 hover:text-white transition-colors"
                     >
                       <FaLinkedinIn />
                     </a>
