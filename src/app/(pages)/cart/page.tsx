@@ -18,13 +18,18 @@ import { IoCheckmark } from "react-icons/io5";
 import { GoPlus } from "react-icons/go";
 
 export default function Cart() {
-  const { numOfCartItems, setnumOfCartItems } = useContext(CartContext);
+  const { numOfCartItems, setnumOfCartItems } = useContext(CartContext)!;
 
   const [productData, setproductData] = useState<null | cartData>(null);
   const [disabledUpdate, setdisabledUpdate] = useState(false);
   const [updateLoading, setupdateLoading] = useState(false);
   const [productIdLoading, setproductIdLoading] = useState<null | string>(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<{
+  id: string;
+  count: number;
+  title: string;
+} | null>(null);  
   const [showModalForClearAll, setShowModalForClearAll] = useState(false);
   const maxPrice = 500;
   const currentPrice = productData?.totalCartPrice || 0;
@@ -59,19 +64,28 @@ export default function Cart() {
       setupdateLoading(false);
     }
   }
-  async function RemoveProductFromCart(productId: string, count: number) {
-    setupdateLoading(true);
-    setproductIdLoading(productId);
-    const res = await RemoveProduct(productId);
-    if (res.status === 'success') {
-      setproductData(res.data);
-      if (res.status === 'success') {
+  async function RemoveProductFromCart(
+  productId: string,
+  count: number
+  ) {
+    try {
+      setupdateLoading(true);
+      setproductIdLoading(productId);
+
+      const res = await RemoveProduct(productId);
+
+      if (res.status === "success") {
         setproductData(res.data);
-        setnumOfCartItems(numOfCartItems - count);
-        setupdateLoading(false);
-      } else {
-        setupdateLoading(false);
+
+        setnumOfCartItems((prev: number) =>
+          Math.max(prev - count, 0)
+        );
       }
+    } catch (error) {
+      console.error("Failed to remove product:", error);
+    } finally {
+      setupdateLoading(false);
+      setproductIdLoading(null);
     }
   }
   async function clearCart() {
@@ -250,55 +264,20 @@ export default function Cart() {
                                       className="h-10 w-10 rounded-xl border border-red-200 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 flex items-center justify-center disabled:opacity-40 transition-all duration-200"
                                       title="Remove item"
                                       aria-label="Remove from cart"
-                                      onClick={() => setShowModal(true)}
+                                      disabled={updateLoading}
+                                      onClick={() => {
+                                        setSelectedProduct({
+                                          id: product.product.id,
+                                          count: product.count,
+                                          title: product.product.title,
+                                        });
+
+                                        setShowModal(true);
+                                      }}
                                     >
                                       <FaTrash className="text-sm" />
                                     </Button>
-                                    {showModal && (
-                                      <div
-                                        onClick={() => setShowModal(false)}
-                                        className="fixed inset-0 flex items-center justify-center bg-black/20 z-50"
-                                      >
-                                        <div
-                                          onClick={(e) => e.stopPropagation()}
-                                          className="bg-white rounded-xl p-6 w-96 text-center shadow-lg"
-                                        >
-                                          <div className="bg-red-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
-                                            <FaTrash className="text-red-600" />
-                                          </div>
-                                          <h2 className="text-xl font-semibold mb-2">
-                                            Remove Item?
-                                          </h2>
-                                          <p className="text-gray-500 text-sm mb-6">
-                                            Remove{' '}
-                                            <span className="font-semibold">
-                                              {product.product.title}
-                                            </span>{' '}
-                                            from your cart?
-                                          </p>
-                                          <div className="flex justify-center gap-4">
-                                            <button
-                                              onClick={() => setShowModal(false)}
-                                              className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer"
-                                            >
-                                              Cancel
-                                            </button>
-                                            <button
-                                              onClick={() => {
-                                                RemoveProductFromCart(
-                                                  product.product.id,
-                                                  product.count,
-                                                );
-                                                setShowModal(false);
-                                              }}
-                                              className="px-4 cursor-pointer py-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
-                                            >
-                                              Remove
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    )}
+                                    
                                   </div>
                                 </div>
                               </div>
@@ -307,6 +286,64 @@ export default function Cart() {
                         </div>
                       </div>
                     ))}
+                    {showModal && selectedProduct && (
+                      <div
+                        onClick={() => {
+                          setShowModal(false);
+                          setSelectedProduct(null);
+                        }}
+                        className="fixed inset-0 flex items-center justify-center bg-black/20 z-50"
+                      >
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          className="bg-white rounded-xl p-6 w-96 text-center shadow-lg"
+                        >
+                          <div className="bg-red-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+                            <FaTrash className="text-red-600" />
+                          </div>
+
+                          <h2 className="text-xl font-semibold mb-2">
+                            Remove Item?
+                          </h2>
+
+                          <p className="text-gray-500 text-sm mb-6">
+                            Remove{" "}
+                            <span className="font-semibold">
+                              {selectedProduct.title}
+                            </span>{" "}
+                            from your cart?
+                          </p>
+
+                          <div className="flex justify-center gap-4">
+                            <button
+                              onClick={() => {
+                                setShowModal(false);
+                                setSelectedProduct(null);
+                              }}
+                              className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+
+                            <button
+                              disabled={updateLoading}
+                              onClick={async () => {
+                                await RemoveProductFromCart(
+                                  selectedProduct.id,
+                                  selectedProduct.count
+                                );
+
+                                setShowModal(false);
+                                setSelectedProduct(null);
+                              }}
+                              className="px-4 cursor-pointer py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
+                            >
+                              {updateLoading ? "Removing..." : "Remove"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     {/*  */}
                     <div className="mt-6 pt-6 border-t border-gray-200 flex items-center justify-between">
                       <Link

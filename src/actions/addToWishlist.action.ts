@@ -23,10 +23,26 @@ export async function AddToWishlist(productId: string) {
 }
 export async function getLoggedUserWishlist() {
   const token = await getAccessToken();
-  const res = await fetch('https://ecommerce.routemisr.com/api/v1/wishlist', {
-    method: 'GET',
-    headers: { token: token as string, 'content-type': 'application/json' },
-  });
+
+  if (!token) {
+    return {
+      status: "unauthenticated",
+      count: 0,
+      data: [],
+    };
+  }
+
+  const res = await fetch(
+    "https://ecommerce.routemisr.com/api/v1/wishlist",
+    {
+      method: "GET",
+      headers: {
+        token,
+        "content-type": "application/json",
+      },
+      cache: "no-store",
+    }
+  );
   const data = await res.json();
   return data;
 }

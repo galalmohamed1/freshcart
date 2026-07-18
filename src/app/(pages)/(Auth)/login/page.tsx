@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import imagelogin from "@images/login.png";
 import Image from "next/image";
 import { FaTruck } from "react-icons/fa";
@@ -23,14 +23,18 @@ import { LoginSchema, LoginSchemaType } from "@/schemas/auth.schema";
 import { toast } from "sonner";
 import { FaEye } from "react-icons/fa6";
 import { FaEyeSlash } from "react-icons/fa";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/firebase/config";
+import { WishlistContext } from "@/context/WishListContext";
 
 export default function Login() {
   const router = useRouter();
+  const { update } = useSession();
+  const wishlistContext = useContext(WishlistContext);
+  const refreshWishlist = wishlistContext?.refreshWishlist;
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginSchemaType>({
@@ -68,12 +72,18 @@ export default function Login() {
       callbackUrl: "/",
     });
     if (response?.ok) {
+      await update();
+
+      if (refreshWishlist) {
+        await refreshWishlist();
+      }
+
       toast.success(
-        "Hey! Good to see you Welcome back! You are now logged in ❤️💕",
+        "Hey! Good to see you. Welcome back! You are now logged in ❤️💕"
       );
-      setTimeout(() => {
-        router.push("/");
-      }, 1500);
+
+      router.replace("/");
+      router.refresh();
     } else {
       toast.error(response?.error);
     }

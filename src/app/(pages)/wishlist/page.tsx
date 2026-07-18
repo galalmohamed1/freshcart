@@ -18,7 +18,7 @@ import ButtonForAddToCart from "@/components/Home/FeaturedProducts/ButtonForAddT
 export default function WishList() {
   const { numOfWishlistItems, setnumOfWishlistItems } =
     useContext(WishlistContext);
-  const [productData, setproductData] = useState<null | ForWishlist>(null);
+  const [productData, setproductData] = useState<ForWishlist | null>(null);
   const [updateLoading, setupdateLoading] = useState(false);
   const [addedToCart, setAddedToCart] = useState<string[]>([]);
 
@@ -29,15 +29,37 @@ export default function WishList() {
     }
   }
 
-  async function RemoveProductFromCart(productId: string, count: number) {
+  async function removeProductFromWishlist(productId: string) {
+  try {
     setupdateLoading(true);
+
     const res = await RemoveFromWishlist(productId);
+
     if (res.status === "success") {
-      setproductData(res);
-      setnumOfWishlistItems(numOfWishlistItems - count);
+      setproductData((prev) => {
+        if (!prev) return prev;
+
+        const updatedProducts = prev.data.filter(
+          (product) => product.id !== productId
+        );
+
+        return {
+          ...prev,
+          count: updatedProducts.length,
+          data: updatedProducts,
+        };
+      });
+
+      setnumOfWishlistItems((prev: number) =>
+        Math.max(prev - 1, 0)
+      );
     }
+  } catch (error) {
+    console.error("Failed to remove product:", error);
+  } finally {
     setupdateLoading(false);
   }
+}
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     getProductCart();
@@ -105,9 +127,9 @@ export default function WishList() {
                 <div className="col-span-2 text-center">Actions</div>
               </div>
               <div className="divide-y divide-gray-100">
-                {productData?.data.map((product) => (
+                {productData?.data.map((product, index) => (
                   <div
-                    key={product._id || product.id}
+                    key={product.id}
                     className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 md:px-6 md:py-5 items-center hover:bg-gray-50/50 transition-colors"
                   >
                     <div className="md:col-span-6 flex items-center gap-4">
@@ -115,13 +137,15 @@ export default function WishList() {
                         className="w-20 h-20 rounded-xl bg-gray-50 border border-gray-100 overflow-hidden shrink-0"
                         href={`/products/${product.id}`}
                       >
-                        <Image
-                          width={200}
-                          height={200}
-                          alt={product.title}
-                          className="w-full h-full object-contain p-2"
-                          src={product.imageCover}
-                        />
+                        {product.imageCover ? (
+                          <Image
+                            width={200}
+                            height={200}
+                            alt={product.title ?? ""}
+                            className="w-full h-full object-contain p-2"
+                            src={product.imageCover}
+                          />
+                        ) : null}
                       </Link>
                       <div className="min-w-0">
                         <Link
@@ -197,7 +221,7 @@ export default function WishList() {
                       <button
                         disabled={updateLoading}
                         onClick={() => {
-                          RemoveProductFromCart(product.id, 1);
+                          removeProductFromWishlist(product.id);
                         }}
                         className="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-all disabled:opacity-50 cursor-pointer"
                         title="Remove"

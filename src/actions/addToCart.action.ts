@@ -16,11 +16,29 @@ export async function AddToCart(productId: string) {
 }
 export async function getLoggedUserCart() {
   const token = await getAccessToken();
-  const res = await fetch('https://ecommerce.routemisr.com/api/v2/cart', {
-    method: 'GET',
-    headers: { token: token as string, 'content-type': 'application/json' },
-    cache: "no-store",
-  });
+
+  if (!token) {
+    return {
+      status: "unauthenticated",
+      numOfCartItems: 0,
+      data: {
+        products: [],
+        totalCartPrice: 0,
+      },
+    };
+  }
+
+  const res = await fetch(
+    "https://ecommerce.routemisr.com/api/v1/cart",
+    {
+      method: "GET",
+      headers: {
+        token,
+        "content-type": "application/json",
+      },
+      cache: "no-store",
+    }
+  );
   const data = await res.json();
   return data;
 }
