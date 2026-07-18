@@ -37,7 +37,7 @@ import { SpinnerCustom } from '@/components/ButtonSpinner/ButtonSpinner';
 export default function CheackOut() {
   const router = useRouter();
 
-  const { setnumOfCartItems } = useContext(CartContext);
+  const { setnumOfCartItems } = useContext(CartContext)!;
   const { id }: { id: string } = useParams();
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'online'>('cash');
