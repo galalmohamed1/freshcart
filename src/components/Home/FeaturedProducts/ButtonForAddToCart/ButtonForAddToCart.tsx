@@ -29,7 +29,7 @@ export default function ButtonForAddToCart({
   icon?: keyof typeof iconsMap;
   id: string;
 }) {
-  const { numOfCartItems, setnumOfCartItems } = useContext(CartContext);
+  const { numOfCartItems, setnumOfCartItems } = useContext(CartContext)!;
   const Icon = icon ? iconsMap[icon] : null;
   const [updateLoading, setupdateLoading] = useState(false);
   const [success, setSuccess] = useState(false);

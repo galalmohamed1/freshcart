@@ -53,7 +53,7 @@ import { CartContext } from '@/context/CartContext';
 import { WishlistContext } from '@/context/WishListContext';
 
 export default function Navbar() {
-   const { numOfCartItems, setnumOfCartItems } = useContext(CartContext);
+   const { numOfCartItems, setnumOfCartItems } = useContext(CartContext)!;
   const { numOfWishlistItems, setnumOfWishlistItems } = useContext(WishlistContext);
   const { data: myData, status } = useSession();
   function mySignOut() {
